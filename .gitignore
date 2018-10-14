@@ -1,8 +1,5 @@
 *.class
 
-# BlueJ files
-*.ctxt
-
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
@@ -18,13 +15,33 @@ hs_err_pid*
 # Operating System Files
 # =========================
 
+# OSX
+# =========================
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
 # Windows
 # =========================
 
-# Windows thumbnail cache files
+# Windows image file caches
 Thumbs.db
 ehthumbs.db
-ehthumbs_vista.db
 
 # Folder config file
 Desktop.ini
@@ -40,3 +57,18 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+# ZEINTELLIJ
+.idea/workspace.xml
+.idea/dictionaries
+.idea/misc.xml
+.idea/libraries
+.idea/uiDesigner.xml
+.idea/kotlinc.xml
+.idea/modules.xml
+.idea/usage.statistics.xml
+.idea/checkstyle-idea.xml
+**/*.iml
+out/
+target/
+*.MF
+*.name
