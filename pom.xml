@@ -21,6 +21,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>aikar</id>
+            <url>https://repo.aikar.co/content/groups/aikar/</url>
+        </repository>
     </repositories>
     <build>
         <finalName>${project.name}</finalName>
@@ -43,7 +47,8 @@
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                     <artifactSet>
                         <includes>
-                            <include>org.bstats:bstats-bukkit</include>
+                            <include>org.bstats.bStats-Metrics:bstats-bukkit</include>
+                            <include>co.aikar:taskchain-bukkit</include>
                         </includes>
                     </artifactSet>
                     <relocations>
@@ -76,6 +81,11 @@
             <artifactId>bstats-bukkit</artifactId>
             <version>1.3</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>co.aikar</groupId>
+            <artifactId>taskchain-bukkit</artifactId>
+            <version>3.7.1</version>
         </dependency>
     </dependencies>
 </project>
