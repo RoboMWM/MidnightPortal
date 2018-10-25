@@ -8,6 +8,8 @@ import org.bukkit.ChunkSnapshot;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.EndGateway;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -36,6 +38,11 @@ public class PortalUtils
     public PortalUtils(Plugin plugin, Table<World, World, Double> enabledWorlds)
     {
         this.enabledWorlds = enabledWorlds;
+    }
+
+    public boolean isEnabledWorld(World world)
+    {
+        return enabledWorlds.columnMap().get(world) != null;
     }
 
     /**
@@ -135,5 +142,44 @@ public class PortalUtils
                     if (snapshot.getBlockType(x, y, z) == material)
                         blockLocations.add(new Location(null, x, y, z));
         return blockLocations;
+    }
+
+    /**
+     * Is a portal frame, given the base (bottom) block
+     * @param block
+     * @return
+     */
+    public boolean isPortalFrame(Block block)
+    {
+        Material frameMaterial = block.getType();
+        Block side1;
+        Block side2;
+
+        //First check for top
+        if (block.getRelative(0, 3, 0).getType() != frameMaterial)
+            return false;
+
+        //Check East-West sides
+        side1 = block.getRelative(1, 1, 0);
+        side2 = block.getRelative(-1, 1, 0);
+        if (isPortalFrameSide(frameMaterial, side1) && isPortalFrameSide(frameMaterial, side2))
+            return true;
+
+        //Check North-South sides
+        side1 = block.getRelative(0, 1, 1);
+        side2 = block.getRelative(0, 1, -1);
+        if (isPortalFrameSide(frameMaterial, side1) && isPortalFrameSide(frameMaterial, side2))
+            return true;
+        return false;
+    }
+
+    private boolean isPortalFrameSide(Material material, Block block)
+    {
+        if (block.getType() != material)
+            return false;
+        block = block.getRelative(BlockFace.UP);
+        if (block.getType() != material)
+            return false;
+        return true;
     }
 }
