@@ -20,10 +20,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Teleporter implements Listener
 {
-    private Plugin plugin;
     private PortalUtils portalUtils;
-
     private Set<Player> pendingTeleportees = ConcurrentHashMap.newKeySet();
+
+    public Teleporter(Plugin plugin, PortalUtils portalUtils)
+    {
+        this.portalUtils = portalUtils;
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
 
     @EventHandler(ignoreCancelled = true)
     private void onEnterEndPortalBlock(PlayerTeleportEndGatewayEvent event)

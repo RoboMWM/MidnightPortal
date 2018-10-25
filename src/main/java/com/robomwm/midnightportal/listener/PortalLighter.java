@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -24,7 +25,7 @@ public class PortalLighter implements Listener
     private Material portalFrameMaterial;
     private PortalUtils portalUtils;
 
-    public PortalLighter(JavaPlugin plugin, PortalUtils portalUtils, Material portalFrameMaterial)
+    public PortalLighter(Plugin plugin, PortalUtils portalUtils, Material portalFrameMaterial)
     {
         this.portalUtils = portalUtils;
         this.portalFrameMaterial = portalFrameMaterial;

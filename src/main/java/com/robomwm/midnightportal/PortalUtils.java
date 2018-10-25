@@ -34,10 +34,13 @@ public class PortalUtils
 {
     private Plugin plugin;
     private Table<World, World, Double> enabledWorlds;
+    private Material portalFrameMaterial;
 
-    public PortalUtils(Plugin plugin, Table<World, World, Double> enabledWorlds)
+    public PortalUtils(Plugin plugin, Table<World, World, Double> enabledWorlds, Material portalFrameMaterial)
     {
+        this.plugin = plugin;
         this.enabledWorlds = enabledWorlds;
+        this.portalFrameMaterial = portalFrameMaterial;
     }
 
     public boolean isEnabledWorld(World world)
@@ -113,7 +116,8 @@ public class PortalUtils
                 }
             }
 
-            //TODO: None found, build one
+            //None found, build one
+            //TODO: build one
             plugin.getLogger().warning("No exit found");
         }).execute();
         return chain;
