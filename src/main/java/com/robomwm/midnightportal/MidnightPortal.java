@@ -48,6 +48,7 @@ public class MidnightPortal extends JavaPlugin
         getConfig().addDefault("enabledWorlds", enabledWorldsExample);
         getConfig().options().copyDefaults(true);
         saveConfig();
+        reloadConfig();
 
         Material portalFrameMaterial = Material.matchMaterial(getConfig().getString("portalFrameMaterial"));
         if (portalFrameMaterial == null)
