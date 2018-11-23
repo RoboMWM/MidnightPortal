@@ -91,7 +91,7 @@ public class PortalUtils
             }
             catch (InterruptedException | ExecutionException e)
             {
-                chain.abortChain();
+                chain.abort();
             }
         }).sync(() ->
         {
@@ -107,19 +107,18 @@ public class PortalUtils
             Chunk chunk = (Chunk)chain.getTaskData("chunk");
             for (Location portalLocation : locations)
             {
-                EndGateway gateway = (EndGateway)chunk.getBlock(portalLocation.getBlockX(), portalLocation.getBlockY(),portalLocation.getBlockZ()).getState(false);
-                if (gateway.getExitLocation().equals(gateway.getLocation()))
+                EndGateway gateway = (EndGateway)chunk.getBlock(portalLocation.getBlockX(), portalLocation.getBlockY(), portalLocation.getBlockZ()).getState(false);
+                if (gateway.isExactTeleport() && gateway.getExitLocation().equals(gateway.getLocation()))
                 {
                     chain.setTaskData("location", gateway.getLocation());
-                    chain.abortChain();
                     return;
                 }
             }
 
             //None found, build one
-            //TODO: build one
-            plugin.getLogger().warning("No exit found");
-        }).execute();
+            buildPortalFrame(location.getBlock());
+            chain.setTaskData("location", location);
+        });
         return chain;
     }
 
@@ -132,8 +131,10 @@ public class PortalUtils
         chain.sync(() ->
         {
             Location destination = (Location)chain.getTaskData("location");
+            destination.add(0.5, -1, 0.5);
             player.teleport(destination);
-        }).execute();
+            plugin.getLogger().info("Teleporting " + player.getName() + " to " + destination);
+        });
         return chain;
     }
 
@@ -159,7 +160,11 @@ public class PortalUtils
         Block side1;
         Block side2;
 
-        //First check for top
+        //First check bottom
+        if (block.getType() != frameMaterial)
+            return false;
+
+        //Then check top
         if (block.getRelative(0, 3, 0).getType() != frameMaterial)
             return false;
 
@@ -177,6 +182,39 @@ public class PortalUtils
         return false;
     }
 
+    public void buildPortalFrame(Block block)
+    {
+        plugin.getLogger().info("Building portal at " + block.getLocation());
+
+        //set bottom
+        block.setType(portalFrameMaterial);
+
+        //set top
+        block.getRelative(0, 3, 0).setType(portalFrameMaterial);
+
+        //set East-West sides
+        for (int i = 0; i < 4; i++)
+        {
+            //East
+            block.getRelative(1, i, 0).setType(portalFrameMaterial);
+            //West
+            block.getRelative(-1, i, 0).setType(portalFrameMaterial);
+        }
+
+        //add gateway blocks
+        block = block.getRelative(BlockFace.UP);
+        block.setType(Material.END_GATEWAY);
+        block.getRelative(BlockFace.UP).setType(Material.END_GATEWAY);
+
+        //set exit location so we know this is a MidnightPortal
+        EndGateway gateway = (EndGateway)block.getState(false);
+        gateway.setExitLocation(gateway.getLocation());
+        gateway.setExactTeleport(true);
+        gateway = (EndGateway)block.getRelative(BlockFace.UP).getState(false);
+        gateway.setExitLocation(gateway.getLocation());
+        gateway.setExactTeleport(true);
+    }
+
     private boolean isPortalFrameSide(Material material, Block block)
     {
         if (block.getType() != material)
@@ -185,5 +223,27 @@ public class PortalUtils
         if (block.getType() != material)
             return false;
         return true;
+    }
+
+    public boolean breakPortal(Block block)
+    {
+        if (block.getType() != portalFrameMaterial)
+            return false;
+
+        for (BlockFace face : new BlockFace[]{BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.DOWN, BlockFace.UP})
+        {
+            Block relative = block.getRelative(face);
+            if (relative.getType() == Material.END_GATEWAY)
+            {
+                for (BlockFace otherFace : new BlockFace[]{BlockFace.UP, BlockFace.DOWN})
+                {
+                    if (relative.getRelative(otherFace).getType() == Material.END_GATEWAY)
+                        relative.getRelative(otherFace).setType(Material.AIR);
+                }
+                relative.setType(Material.AIR);
+                return true;
+            }
+        }
+        return false;
     }
 }

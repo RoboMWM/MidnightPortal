@@ -9,5 +9,8 @@
         <module name="MidnightPortal" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="MidnightPortal" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
