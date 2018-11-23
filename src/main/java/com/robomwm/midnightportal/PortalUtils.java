@@ -116,6 +116,7 @@ public class PortalUtils
             }
 
             //None found, build one
+            location.setY(location.getWorld().getHighestBlockYAt(location));
             buildPortalFrame(location.getBlock());
             chain.setTaskData("location", location);
         });
