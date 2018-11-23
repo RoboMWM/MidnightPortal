@@ -7,6 +7,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.robomwm.midnightportal.listener.PortalLighter;
 import com.robomwm.midnightportal.listener.Teleporter;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -37,14 +38,15 @@ public class MidnightPortal extends JavaPlugin
         taskChainFactory = BukkitTaskChainFactory.create(this);
 
         //Default config
+        getConfig().options().header("Ensure disable-teleportation-suffocation-check in paper.yml is enabled for all destination worlds!");
         getConfig().addDefault("portalFrameMaterial", "BLACK_WOOL");
         Map<String, Double> worldExample = new HashMap<>();
         Map<String, Double> netherExample = new HashMap<>();
-        worldExample.put("world_nether", 8D);
+        worldExample.put("world_the_end", 8D);
         netherExample.put("world", 0.125D);
         Map<String, Map<String, Double>> enabledWorldsExample = new LinkedHashMap<>();
         enabledWorldsExample.put("world", worldExample);
-        enabledWorldsExample.put("world_nether", netherExample);
+        enabledWorldsExample.put("world_the_end", netherExample);
         getConfig().addDefault("enabledWorlds", enabledWorldsExample);
         getConfig().options().copyDefaults(true);
         saveConfig();
@@ -79,5 +81,6 @@ public class MidnightPortal extends JavaPlugin
         PortalUtils portalUtils = new PortalUtils(this, worlds, portalFrameMaterial);
         new Teleporter(this, portalUtils);
         new PortalLighter(this, portalUtils, portalFrameMaterial);
+        new Metrics(this);
     }
 }
