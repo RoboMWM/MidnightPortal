@@ -4,3 +4,5 @@ author: RoboMWM
 version: "${project.version}"
 website: https://github.com/robomwm
 api-version: 1.13
+softdepend:
+- Multiverse-Core
