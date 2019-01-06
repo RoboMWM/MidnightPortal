@@ -39,7 +39,7 @@ public class PortalLighter implements Listener
             return;
         if (event.getBlockFace() != BlockFace.UP)
             return;
-        if (event.getItem().getType() != Material.FLINT_AND_STEEL)
+        if (event.getItem() == null || event.getItem().getType() != Material.FLINT_AND_STEEL)
             return;
 
         Block block = event.getClickedBlock();
